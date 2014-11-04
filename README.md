@@ -1,7 +1,7 @@
 Założenia projektu
 ---------------------
-	- rejestracja danych samochodu, gps i wysłanie ich na serwer
-	- wyświetlanie na serwerze w wygodnej formie tych danych, statystyki
+- rejestracja danych samochodu, gps i wysłanie ich na serwer
+- wyświetlanie na serwerze w wygodnej formie tych danych, statystyki
 
 Jak to działa?
 --------------------
