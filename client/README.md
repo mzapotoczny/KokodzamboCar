@@ -1,2 +1,4 @@
 Założenia:
-	* ustawienia, dane itd trzymamy w sqlite
+---------------------
+
+* ustawienia, dane itd trzymamy w sqlite
