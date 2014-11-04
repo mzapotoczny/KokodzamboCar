@@ -1,8 +1,10 @@
-*** Założenia projektu ***
+Założenia projektu
+---------------------
 	- rejestracja danych samochodu, gps i wysłanie ich na serwer
 	- wyświetlanie na serwerze w wygodnej formie tych danych, statystyki
 
-*** Jak to działa? ***
+Jak to działa?
+--------------------
 	- Użytkownik zakłada konto w którym podaje login, hasło, nazwę konta (samochodu), i ew. dane potrzebne przy obliczeniach (jak pojemność silnika, masa)
 	- Po założeniu konta można się zalogować w aplikacji
 	- Rejestrowanie podzielone na sesje
