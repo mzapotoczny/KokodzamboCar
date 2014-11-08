@@ -8,7 +8,6 @@ import android.content.DialogInterface;
  * Created by michal on 23.10.14.
  */
 public class Commons {
-    static String kErrorTag = "KoCar";
     static void showNotImplemented(Context ctx) {
         AlertDialog dialog = new AlertDialog.Builder(ctx)
                 .setTitle("Alert")

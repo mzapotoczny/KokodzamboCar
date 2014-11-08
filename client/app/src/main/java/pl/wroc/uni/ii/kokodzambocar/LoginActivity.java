@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class LoginActivity extends ActionBarActivity {
+    static String kErrorTag = "KoCar";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +40,17 @@ public class LoginActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void loginButtonClick(View view) {
+    public void registerLabelClick(View view) {
         Commons.showNotImplemented(this);
     }
 
-    public void registerLabelClick(View view) {
+    public void loginButtonClick(View view) {
         try{
             Intent k = new Intent(LoginActivity.this, SessionStart.class);
             startActivity(k);
             finish();
         }catch (Exception e){
-            Log.e(Commons.kErrorTag, "Could not start SessionStart activity");
+            Log.e(kErrorTag, "Could not start SessionStart activity");
         }
     }
 }

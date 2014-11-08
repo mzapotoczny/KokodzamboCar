@@ -20,6 +20,12 @@
             android:name="pl.wroc.uni.ii.kokodzambocar.SessionStart"
             android:label="@string/title_activity_session_start" >
         </activity>
+        <activity
+            android:name="pl.wroc.uni.ii.kokodzambocar.Status"
+            android:label="@string/title_activity_status" >
+        </activity>
     </application>
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
 </manifest>
