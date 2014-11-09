@@ -24,4 +24,24 @@
         android:layout_alignParentEnd="true"
         android:text="xxx" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendText"
+        android:layout_below="@+id/statusText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/statusText"
+        android:layout_alignEnd="@+id/statusText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send"
+        android:id="@+id/button"
+        android:layout_below="@+id/sendText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="sendUserInput" />
+
 </RelativeLayout>

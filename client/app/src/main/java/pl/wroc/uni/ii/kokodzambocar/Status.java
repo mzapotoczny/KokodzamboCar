@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -35,6 +36,10 @@ public class Status extends ActionBarActivity implements BluetoothInterface {
     private enum StatusType { STATUS_SUCCESS, STATUS_WAITING, STATUS_FAILURE };
 
     private TextView mStatusTextView;
+    private EditText mUserInput;
+
+    private static String[] commands = {"AT Z", "AT E0", "AT E0", "AT L0", "AT SP 0", "01 05"};
+    private static int currCommand = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,14 @@ public class Status extends ActionBarActivity implements BluetoothInterface {
         setContentView(R.layout.activity_status);
 
         this.mStatusTextView = (TextView) findViewById(R.id.statusText);
+        this.mUserInput = (EditText) findViewById(R.id.sendText);
         initalizeBluetooth();
+    }
+
+    public void sendUserInput(View view) {
+        String input = this.mUserInput.getText().toString();
+        input = input + "\r\n";
+        mmBluetoothThread.write(input.getBytes());
     }
 
 
@@ -157,7 +169,7 @@ public class Status extends ActionBarActivity implements BluetoothInterface {
     /* Bluetooth interface methods */
     public void connected() {
         setStatus("Connected", StatusType.STATUS_SUCCESS);
-//        mmBluetoothThread.write("ATZ\n");
+        receiveMessage(null, 0);
     }
 
     public void error(BluetoothError reason){
@@ -181,8 +193,17 @@ public class Status extends ActionBarActivity implements BluetoothInterface {
         setStatus("Error: "+str, StatusType.STATUS_FAILURE);
     }
 
-    public void receiveMessage(byte[] buffer, int length) {
-        String s = new String(buffer);
-        Log.i("receiveMessage", s);
+    public synchronized void receiveMessage(byte[] buffer, int length) {
+        byte[] buff = new byte[length];
+        for (int i = 0; i < length; i++)
+            buff[i] = buffer[i];
+        String s = new String(buff);
+        Log.i("receiveMessage", "Received message "+s.replace('\r', 'R').replace('\n', 'N'));
+        if (currCommand < commands.length){
+            String msg = commands[currCommand++];
+            Log.i("sendMessage", msg);
+            msg = msg + "\r";
+            mmBluetoothThread.write(msg.getBytes());
+        }
     }
 }

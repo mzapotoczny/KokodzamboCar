@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,9 +75,9 @@ public class BluetoothThread extends Thread implements BluetoothInterface {
             }
         }catch (IOException e) {
             error(BluetoothInterface.BluetoothError.CONNECTION);
-        }finally {
-            return false;
         }
+
+        return false;
     }
 
     private boolean createStreams() {
@@ -86,19 +87,30 @@ public class BluetoothThread extends Thread implements BluetoothInterface {
             return true;
         } catch (IOException e) {
             error(BluetoothInterface.BluetoothError.STREAM);
-        }finally {
-            return false;
         }
+        return false;
     }
 
     private void receive(){
         byte[] buffer = new byte[1024];
-        int bytes;
+        int bytes = 0;
 
         while (true) {
             try {
-                bytes = mmInStream.read(buffer);
-                receiveMessage(buffer, bytes);
+                if (bytes > 0){
+                    // bytes + 1?
+                    int mbytes = mmInStream.read(buffer, bytes, 1024 - bytes);
+                    bytes += mbytes;
+                }else {
+                    bytes = mmInStream.read(buffer);
+                }
+                int bt = (int) buffer[bytes-1];
+                String bts = String.valueOf(bt);
+
+                if (bytes >= 3 && buffer[bytes-3] == '\r' && buffer[bytes-2] == '\r' && buffer[bytes-1] == '>') {
+                    receiveMessage(buffer, bytes-3);
+                    bytes = 0;
+                }
             } catch (IOException e) {
                 error(BluetoothInterface.BluetoothError.READ);
                 break;
