@@ -8,7 +8,7 @@ import android.content.DialogInterface;
  * Created by michal on 23.10.14.
  */
 public class Commons {
-    static void showNotImplemented(Context ctx) {
+    public static void showNotImplemented(Context ctx) {
         AlertDialog dialog = new AlertDialog.Builder(ctx)
                 .setTitle("Alert")
                 .setMessage("To be implemented")

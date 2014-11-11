@@ -1,4 +1,4 @@
-package pl.wroc.uni.ii.kokodzambocar;
+package pl.wroc.uni.ii.kokodzambocar.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -12,9 +12,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import pl.wroc.uni.ii.kokodzambocar.R;
+
 
 public class SessionStart extends ActionBarActivity {
-    private static String kErrorTag = "SessionStart";
+    private static String ERROR_TAG = "SessionStart";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class SessionStart extends ActionBarActivity {
             Intent k = new Intent(SessionStart.this, Status.class);
             startActivity(k);
         }catch (Exception e){
-            Log.e(kErrorTag, "Could not start SessionStart activity");
+            Log.e(ERROR_TAG, "Could not start SessionStart activity");
         }
     }
 }

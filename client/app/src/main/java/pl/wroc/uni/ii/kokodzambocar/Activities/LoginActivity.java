@@ -1,4 +1,4 @@
-package pl.wroc.uni.ii.kokodzambocar;
+package pl.wroc.uni.ii.kokodzambocar.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -8,8 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import pl.wroc.uni.ii.kokodzambocar.Commons;
+import pl.wroc.uni.ii.kokodzambocar.R;
+
 public class LoginActivity extends ActionBarActivity {
-    static String kErrorTag = "KoCar";
+    static String ERROR_TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class LoginActivity extends ActionBarActivity {
             startActivity(k);
             finish();
         }catch (Exception e){
-            Log.e(kErrorTag, "Could not start SessionStart activity");
+            Log.e(ERROR_TAG, "Could not start SessionStart activity");
         }
     }
 }
