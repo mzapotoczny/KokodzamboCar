@@ -108,8 +108,9 @@ public class OBDThread extends Thread {
 
     public void cancel() {
         try {
-            mSocket.close();
             mCancelled = true;
+            mSocket.close();
+            mmCallback.disconnected();
         } catch (IOException e) {
             mmCallback.error(new OBDInitializationException());
         }

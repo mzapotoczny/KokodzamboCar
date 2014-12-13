@@ -20,7 +20,10 @@ public class SQLiteLogger extends SQLiteOpenHelper implements OBDLogger{
         SQLiteDatabase db = getWritableDatabase();
         ContentValues value = new ContentValues();
         value.put("pid", OBDId.getId(command));
-        value.put("value", command.getResult().getFormattedValue());
+        if (command.getResult() != null && command.getResult().getFormattedValue() != null)
+            value.put("value", command.getResult().getFormattedValue());
+        else
+            value.put("value", command.getRawResult());
         db.insertOrThrow("obd", null, value);
     }
 

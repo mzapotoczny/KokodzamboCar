@@ -11,6 +11,9 @@ public class CelsiusUnit extends TemperatureUnit {
 
     @Override
     public String getFormattedValue() {
-        return value.toString()+" *C";
+        if (value != null)
+            return value.toString()+" *C";
+        else
+            return "- *C";
     }
 }

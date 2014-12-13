@@ -11,8 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import pl.wroc.uni.ii.kokodzambocar.Api.Session;
+import pl.wroc.uni.ii.kokodzambocar.Api.SessionApi;
+import pl.wroc.uni.ii.kokodzambocar.Constants;
 import pl.wroc.uni.ii.kokodzambocar.R;
+import retrofit.RestAdapter;
 
 
 public class SessionStart extends ActionBarActivity {
@@ -23,13 +28,17 @@ public class SessionStart extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session_start);
 
-        ArrayList<String> sessions = new ArrayList<String>();
-        sessions.add("First");
-        sessions.add("Second");
-        sessions.add("Third");
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(Constants.apiEndPoint).build();
+
+        SessionApi sapi = restAdapter.create(SessionApi.class);
+        List<Session> sessions = sapi.getSessions(1);
+        ArrayList<String> strSessions = new ArrayList<String>();
+        for (Session s : sessions){
+            strSessions.add(s.name);
+        }
 
         final ListView view = (ListView) findViewById(R.id.sessionsListView);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, sessions);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, strSessions);
         view.setAdapter(adapter);
     }
 

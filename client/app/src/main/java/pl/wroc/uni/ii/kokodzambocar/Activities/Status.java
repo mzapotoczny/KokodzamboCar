@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -64,6 +65,14 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
         this.mLinearLayout   = (LinearLayout) findViewById(R.id.linearLayout);
 
         initializeBluetooth();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mmOBDThread != null){
+            mmOBDThread.cancel();
+        }
     }
 
     @Override
@@ -275,6 +284,15 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
             @Override
             public void run() {
                 setStatus("Error: "+error.getMessage(), StatusType.STATUS_FAILURE);
+            }
+        });
+    }
+
+    public void disconnected() {
+        mMainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                setStatus("Disconnected", StatusType.STATUS_SUCCESS);
             }
         });
     }
