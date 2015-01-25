@@ -7,7 +7,9 @@ Autoryzacja: OAuth (1/2?)
 | /sessions   | GET    | [ {id:INT,name:STRING,created_at:DATE},... ]  | Zwraca wszystkie sesje aktualnie zalogowanego użytkownika  |
 | /sessions   | POST   | {name:STRING}  | Tworzy nową sesje (pole created_at i id nadaje serwer)  |
 | /sessions/X | DELETE | - | Usuwa sesję o id = X |
-| /session/X  | POST   | [ { pid_id:INT, value:STRING, time_diff:INT} ]  | Dodaje nowe pomiary do sesji. Ilość pomiarów w jednym zapytaniu będzie ograniczona do jakieś sensowej liczby. Value w stringu dlatego, ze mamy różne jednostki i tak chyba będzie najprościej. time_diff to timestamp od utworzenia sesji |
+| /sessions/X | POST   | [ { pid_id:INT, value:STRING } ]  | Dodaje nowe pomiary do sesji. Ilość pomiarów w jednym zapytaniu będzie ograniczona do jakieś sensowej liczby. Value w stringu dlatego, ze mamy różne jednostki i tak chyba będzie najprościej. |
+
+UWAGA!! Zmiany: Zamieniono ostatni url z /session/X -> /sessions/X; Usunięto time_diff z tego samego zapytania
 
 Do tego jakieś standardowe tworzenie użytkownika.
 
