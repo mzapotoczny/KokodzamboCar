@@ -10,6 +10,7 @@ import android.view.View;
 
 import pl.wroc.uni.ii.kokodzambocar.Commons;
 import pl.wroc.uni.ii.kokodzambocar.R;
+import pl.wroc.uni.ii.kokodzambocar.Services.Uploader;
 
 public class LoginActivity extends ActionBarActivity {
     static String ERROR_TAG = "LoginActivity";
@@ -19,7 +20,6 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,7 +49,10 @@ public class LoginActivity extends ActionBarActivity {
 
     public void loginButtonClick(View view) {
         try{
-            Intent k = new Intent(LoginActivity.this, SessionStart.class);
+            Intent uploaderIntent = new Intent(this, Uploader.class);
+            this.startService(uploaderIntent);
+
+            Intent k = new Intent(this, SessionStart.class);
             startActivity(k);
             finish();
         }catch (Exception e){

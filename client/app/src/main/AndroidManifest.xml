@@ -24,6 +24,10 @@
             android:name=".Activities.Status"
             android:label="@string/title_activity_status" >
         </activity>
+        <service
+            android:name=".Services.Uploader"
+            android:icon="@drawable/ic_launcher" >
+        </service>
     </application>
 
     <uses-permission android:name="android.permission.BLUETOOTH" />

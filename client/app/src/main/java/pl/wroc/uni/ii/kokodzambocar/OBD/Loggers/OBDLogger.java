@@ -7,4 +7,5 @@ import pl.wroc.uni.ii.kokodzambocar.OBD.Commands.OBDCommand;
  */
 public interface OBDLogger {
     public void log(OBDCommand command);
+    public void finalize();
 }

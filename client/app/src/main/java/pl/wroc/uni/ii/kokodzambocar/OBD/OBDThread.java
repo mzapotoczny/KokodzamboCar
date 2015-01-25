@@ -84,7 +84,6 @@ public class OBDThread extends Thread {
             try{
                 OBDCommand command = mTasks.take();
                 performCommand(command);
-                mmLogger.log(command);
             }catch (InterruptedException e) {
                 Log.e(LOG_TAG, "Interrupted exception occurred on take");
             }
@@ -94,6 +93,7 @@ public class OBDThread extends Thread {
     private void performCommand(OBDCommand command) throws InterruptedException{
         try {
             command.perform(mInStream, mOutStream);
+            mmLogger.log(command);
         }catch (OBDException e) {
             mmCallback.error(e);
         }finally{
@@ -109,6 +109,7 @@ public class OBDThread extends Thread {
     public void cancel() {
         try {
             mCancelled = true;
+            mmLogger.finalize();
             mSocket.close();
             mmCallback.disconnected();
         } catch (IOException e) {

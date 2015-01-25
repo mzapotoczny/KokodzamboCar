@@ -2,6 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.wroc.uni.ii.kokodzambocar.Activities.SessionStart">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_refresh_sessions" android:title="Refresh sessions"
+        android:orderInCategory="100" app:showAsAction="ifRoom" />
 </menu>

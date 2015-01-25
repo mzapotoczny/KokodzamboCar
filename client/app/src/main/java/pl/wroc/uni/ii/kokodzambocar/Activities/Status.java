@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+import pl.wroc.uni.ii.kokodzambocar.Api.Session;
+import pl.wroc.uni.ii.kokodzambocar.Constants;
 import pl.wroc.uni.ii.kokodzambocar.OBD.BluetoothStatusInterface;
 import pl.wroc.uni.ii.kokodzambocar.OBD.Commands.Engine.OBDEngineLoadCommand;
 import pl.wroc.uni.ii.kokodzambocar.OBD.Commands.Engine.OBDEngineRuntimeCommand;
@@ -45,12 +49,15 @@ import pl.wroc.uni.ii.kokodzambocar.R;
 
 public class Status extends ActionBarActivity implements BluetoothStatusInterface {
     private static int kBluetoothRequest = 1;
+    private Session session = new Session();
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice[] mDevices;
     private OBDThread mmOBDThread;
 
     private enum StatusType { STATUS_SUCCESS, STATUS_WAITING, STATUS_FAILURE };
 
+    private Button mActionButton;
+    private boolean isActionButtonStop = true;
     private TextView mStatusTextView;
     private LinearLayout mLinearLayout;
     private final ArrayList<TextView> mLinearTextViews = new ArrayList<TextView>();
@@ -63,8 +70,16 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
 
         this.mStatusTextView = (TextView) findViewById(R.id.statusText);
         this.mLinearLayout   = (LinearLayout) findViewById(R.id.linearLayout);
+        this.mActionButton   = (Button) findViewById(R.id.btnStop);
 
-        initializeBluetooth();
+        Intent intent = getIntent();
+
+        session.name = intent.getStringExtra(Constants.INTENT_SESSION_NAME);
+        session.id   = intent.getIntExtra(Constants.INTENT_SESSION_ID, -1);
+
+        setTitle("Session: " + session.name);
+        setActionButtonAsStart();
+        startAction();
     }
 
     @Override
@@ -72,29 +87,17 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
         super.onStop();
         if (mmOBDThread != null){
             mmOBDThread.cancel();
+            mmOBDThread = null;
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_status, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mmOBDThread != null){
+            mmOBDThread.cancel();
+            mmOBDThread = null;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void setStatus(String text, StatusType type){
@@ -158,7 +161,7 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
 
     private void connectToDevice(BluetoothDevice device) {
         try {
-            mmOBDThread = new OBDThread(device, this, new SQLiteLogger(this));
+            mmOBDThread = new OBDThread(device, this, new SQLiteLogger(this, session));
             setStatus("Connecting...", StatusType.STATUS_WAITING);
             mmOBDThread.start();
         }catch (IOException exception){
@@ -268,12 +271,42 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
         return command;
     }
 
+    public void stopButtonClick(View view) {
+        if (isActionButtonStop && mmOBDThread != null){
+            stopAction();
+        }else if (!isActionButtonStop){
+            startAction();
+        }
+    }
+
+    private void stopAction() {
+        mmOBDThread.cancel();
+        mLinearLayout.removeAllViews();
+        mLinearTextViews.clear();
+        mmOBDThread = null;
+    }
+
+    private void startAction() {
+        initializeBluetooth();
+    }
+
+    private void setActionButtonAsStop(){
+        mActionButton.setText("Stop");
+        isActionButtonStop = true;
+    }
+
+    private void setActionButtonAsStart(){
+        mActionButton.setText("Start");
+        isActionButtonStop = false;
+    }
+
     /* Bluetooth interface methods */
     public void connected() {
         mMainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
                 setStatus("Connected", StatusType.STATUS_SUCCESS);
+                setActionButtonAsStop();
                 initializeCommunication();
             }
         });
@@ -284,6 +317,7 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
             @Override
             public void run() {
                 setStatus("Error: "+error.getMessage(), StatusType.STATUS_FAILURE);
+                setActionButtonAsStart();
             }
         });
     }
@@ -293,6 +327,7 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
             @Override
             public void run() {
                 setStatus("Disconnected", StatusType.STATUS_SUCCESS);
+                setActionButtonAsStart();
             }
         });
     }
