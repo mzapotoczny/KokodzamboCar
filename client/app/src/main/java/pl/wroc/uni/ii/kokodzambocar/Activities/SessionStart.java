@@ -66,9 +66,12 @@ public class SessionStart extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 mGetProgressDialog.dismiss();
+                String cause = "unknown";
+                if (error != null && error.getCause() != null)
+                    cause = error.getCause().toString();
                 new AlertDialog.Builder(SessionStart.this).
                         setTitle("Error").
-                        setMessage("An error occurred when receiving session list. Reason: "+error.getCause().toString()).
+                        setMessage("An error occurred when receiving session list. Reason: "+cause).
                         setNeutralButton("OK", null).
                         show();
             }

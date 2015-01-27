@@ -45,6 +45,7 @@ import pl.wroc.uni.ii.kokodzambocar.OBD.Exceptions.OBDUnexpectedResponseExceptio
 import pl.wroc.uni.ii.kokodzambocar.OBD.Loggers.SQLiteLogger;
 import pl.wroc.uni.ii.kokodzambocar.OBD.OBDThread;
 import pl.wroc.uni.ii.kokodzambocar.R;
+import pl.wroc.uni.ii.kokodzambocar.Services.Uploader;
 
 
 public class Status extends ActionBarActivity implements BluetoothStatusInterface {
@@ -284,6 +285,8 @@ public class Status extends ActionBarActivity implements BluetoothStatusInterfac
         mLinearLayout.removeAllViews();
         mLinearTextViews.clear();
         mmOBDThread = null;
+        Intent uploaderIntent = new Intent(this, Uploader.class);
+        this.stopService(uploaderIntent);
     }
 
     private void startAction() {

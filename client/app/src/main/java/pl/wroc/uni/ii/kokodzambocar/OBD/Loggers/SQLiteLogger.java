@@ -25,10 +25,10 @@ public class SQLiteLogger extends OBDDatabase implements OBDLogger{
     public void log(OBDCommand command) {
         String value = "";
         if (command.getResult() != null && command.getResult().getFormattedValue() != null)
-            value = command.getResult().getValue().toString();
+            value = command.getResult().getFormattedValue().toString();
         else
             value = command.getRawResult();
-        Measurement m = new Measurement(OBDId.getId(command), value);
+        Measurement m = new Measurement(session.id, OBDId.getId(command), value);
         mMeasurements.add(m);
 
         if (mMeasurements.size() >= 25);
@@ -44,7 +44,7 @@ public class SQLiteLogger extends OBDDatabase implements OBDLogger{
         SQLiteDatabase db = getWritableDatabase();
         ArrayList<Measurement> unsuccessfullMeasurements = new ArrayList<Measurement>();
         for (Measurement m : mMeasurements) {
-            if (!insert(db, session, m))
+            if (!insert(db, m))
                 unsuccessfullMeasurements.add(m);
         }
         mMeasurements = unsuccessfullMeasurements;

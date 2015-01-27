@@ -19,6 +19,6 @@ public interface SessionApi {
     @POST("/sessions")
     void addSession(@Body SessionName sessionName, Callback<Session> callback);
 
-    @POST("/sessions/{id}")
-    Response addMeasurements(@Path("id") Integer sessionId, @Body List<Measurement> measurements);
+    @POST("/measurements")
+    Response addMeasurements(@Body Measurements measurements);
 }

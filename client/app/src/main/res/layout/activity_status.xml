@@ -9,8 +9,7 @@
     <TextView android:text="Current status:" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/topText"
-        android:clickable="true"
-        android:onClick="doInitBluetooth" />
+        android:clickable="true" />
 
     <TextView
         android:layout_width="wrap_content"

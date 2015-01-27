@@ -8,10 +8,13 @@ import com.google.gson.annotations.SerializedName;
 public class Measurement {
     @SerializedName("pid_id")
     public Integer pid;
+    @SerializedName("session_id")
+    public Integer session;
     public String  value;
 
-    public Measurement(Integer pid, String value){
+    public Measurement(Integer session, Integer pid, String value){
         this.pid = pid;
         this.value = value;
+        this.session = session;
     }
 }

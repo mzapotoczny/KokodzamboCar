@@ -14,6 +14,7 @@ import java.util.List;
 
 import pl.wroc.uni.ii.kokodzambocar.Api.Api;
 import pl.wroc.uni.ii.kokodzambocar.Api.Measurement;
+import pl.wroc.uni.ii.kokodzambocar.Api.Measurements;
 import pl.wroc.uni.ii.kokodzambocar.Database.OBDDatabase;
 import pl.wroc.uni.ii.kokodzambocar.Database.OBDDatabaseValue;
 import retrofit.RetrofitError;
@@ -34,7 +35,7 @@ public class Uploader extends Service {
             while (running) {
                 try{
                     upload();
-                    Thread.sleep(200000);
+                    Thread.sleep(10000);
                 }catch (InterruptedException e){
                 }
             }
@@ -48,30 +49,23 @@ public class Uploader extends Service {
             if (values.size() == 0) {
                 return;
             }
-            Collections.sort(values, new Comparator<OBDDatabaseValue>() {
-                @Override
-                public int compare(OBDDatabaseValue lhs, OBDDatabaseValue rhs) {
-                    return (lhs.session < rhs.session) ? 1 : 0;
-                }
-            });
             ArrayList<Integer> sentIds = new ArrayList<Integer>();
-            ArrayList<Measurement> currentSend = new ArrayList<Measurement>();
-            Integer currentSession = values.get(0).session;
+            Measurements currentSend = new Measurements();
             Integer lastSendId = 0;
             for (Integer currentValueId = 0; currentValueId < values.size(); currentValueId++) {
 
                 OBDDatabaseValue currentValue = values.get(currentValueId);
-                if (currentSend.size() >= maxSendout || currentSession != currentValue.session) {
-                    if (send(currentSession, currentSend)) {
+                if (currentSend.measurements.size() >= maxSendout) {
+                    if (send(currentSend)) {
                         for (Integer i = lastSendId; i < currentValueId; i++) sentIds.add(i);
                     }
                     lastSendId = currentValueId;
-                    currentSend.clear();
+                    currentSend.measurements.clear();
                 }
-                currentSend.add(new Measurement(currentValue.pid, currentValue.text));
+                currentSend.measurements.add(new Measurement(currentValue.session, currentValue.pid, currentValue.text));
 
             }
-            if (send(currentSession, currentSend)) {
+            if (send(currentSend)) {
                 for (Integer i = lastSendId; i < values.size(); i++) sentIds.add(i);
             }
             db = getWritableDatabase();
@@ -80,9 +74,9 @@ public class Uploader extends Service {
             }
         }
 
-        public boolean send(Integer session, List<Measurement> measurements) {
+        public boolean send(Measurements measurements) {
             try {
-                Response rsp = Api.getInstance().session.addMeasurements(session, measurements);
+                Response rsp = Api.getInstance().session.addMeasurements(measurements);
             }catch(RetrofitError e){
                 return false;
             }

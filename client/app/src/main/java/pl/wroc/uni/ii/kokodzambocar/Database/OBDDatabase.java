@@ -21,9 +21,9 @@ public class OBDDatabase extends SQLiteOpenHelper {
         super(ctx, "kokodzamboCarOBDData.db", null, 1);
     }
 
-    protected boolean insert(SQLiteDatabase db, Session session, Measurement measurement) {
+    protected boolean insert(SQLiteDatabase db, Measurement measurement) {
         ContentValues value = new ContentValues();
-        value.put("session", session.id);
+        value.put("session", measurement.session);
         value.put("pid", measurement.pid);
         value.put("value", measurement.value);
         return (db.insert(tableName, null, value) > -1);

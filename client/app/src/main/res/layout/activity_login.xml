@@ -23,7 +23,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:text="bb@bb.bb" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,7 +48,8 @@
         android:layout_alignParentEnd="true"
         android:editable="false"
         android:elegantTextHeight="false"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:text="zaq12wsx" />
 
     <Button
         android:layout_width="wrap_content"
